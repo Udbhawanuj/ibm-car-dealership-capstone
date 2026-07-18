@@ -1,0 +1,12 @@
+.git
+.github
+.venv
+venv
+**/__pycache__
+**/*.pyc
+*.sqlite3
+server/staticfiles
+screenshots
+evidence
+node_modules
+.DS_Store

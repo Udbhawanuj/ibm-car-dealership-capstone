@@ -1,0 +1,18 @@
+{% extends 'djangoapp/base.html' %}
+{% block title %}Post Review | DriveSphere{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-card wide">
+    <div class="form-intro"><span class="eyebrow dark">SHARE YOUR EXPERIENCE</span><h1>Post a review</h1><p>Reviewing <strong>{{ dealer.full_name }}</strong> · Dealer ID {{ dealer.id }}</p><div class="endpoint-bar"><span>Visible endpoint:</span><code>{{ request.path }}</code></div></div>
+    <form action="/ui/add-review/{{ dealer.id }}/" method="post" class="review-form">{% csrf_token %}
+      <label class="full">Your review<textarea name="review" rows="5" placeholder="Tell future customers about service quality, staff behavior, and your overall experience..." required></textarea></label>
+      <label>Car make<select name="car_make" required><option value="">Choose make</option>{% for make in makes %}<option>{{ make.name }}</option>{% endfor %}</select></label>
+      <label>Car model<input name="car_model" value="Camry" required></label>
+      <label>Car year<input name="car_year" type="number" value="2024" min="2015" max="2030" required></label>
+      <label>Purchase date<input name="purchase_date" type="date" value="2026-07-15"></label>
+      <label class="checkbox full"><input name="purchase" type="checkbox" checked><span>I purchased a vehicle from this dealership.</span></label>
+      <div class="form-actions full"><a class="btn btn-outline" href="/dealer/{{ dealer.id }}/">Cancel</a><button class="btn btn-primary" type="submit">Submit Review</button></div>
+    </form>
+  </div>
+</section>
+{% endblock %}

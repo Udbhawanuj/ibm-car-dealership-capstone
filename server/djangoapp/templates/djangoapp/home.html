@@ -1,0 +1,48 @@
+{% extends 'djangoapp/base.html' %}
+{% block title %}Dealerships | DriveSphere{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-content">
+    <div class="eyebrow">NATIONAL DEALER NETWORK</div>
+    <h1>Find a dealership people genuinely trust.</h1>
+    <p>Explore verified branches, compare customer experiences, and share your own review after a visit.</p>
+    <div class="hero-stats">
+      <div><strong>{{ dealers|length }}</strong><span>branches shown</span></div>
+      <div><strong>8</strong><span>states covered</span></div>
+      <div><strong>4.8/5</strong><span>community score</span></div>
+    </div>
+  </div>
+  <div class="hero-art" aria-label="Modern car illustration">
+    <div class="road-line"></div><div class="car-shape"><div class="window"></div><div class="wheel w1"></div><div class="wheel w2"></div></div>
+  </div>
+</section>
+
+<section class="content-shell">
+  <div class="section-heading">
+    <div><span class="eyebrow dark">BROWSE LOCATIONS</span><h2>Dealership branches</h2></div>
+    <label class="filter-control">Filter by State
+      <select id="stateFilter" onchange="window.location=this.value==='All' ? '/' : '/dealers/'+this.value+'/'">
+        {% for value, label in states %}<option value="{{ value }}" {% if selected_state == value|upper %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+  </div>
+  <div class="endpoint-bar"><span>Visible endpoint:</span><code>{{ request.path }}</code></div>
+  <div class="dealer-grid">
+    {% for dealer in dealers %}
+      <article class="dealer-card">
+        <div class="dealer-card-top"><span class="state-badge">{{ dealer.state }}</span><span class="rating">★ 4.{{ forloop.counter|add:3 }}</span></div>
+        <div class="dealer-icon">{{ dealer.short_name|slice:':2'|upper }}</div>
+        <h3>{{ dealer.full_name }}</h3>
+        <p>{{ dealer.address }}<br>{{ dealer.city }}, {{ dealer.state }} {{ dealer.zip_code }}</p>
+        <div class="dealer-meta"><span>☎ {{ dealer.phone }}</span><span>● Open today</span></div>
+        <div class="card-actions">
+          <a class="btn btn-dark" href="/dealer/{{ dealer.id }}/">View Dealer</a>
+          {% if request.user.is_authenticated %}<a class="btn btn-accent" href="/dealer/{{ dealer.id }}/review/">Review Dealer</a>{% endif %}
+        </div>
+      </article>
+    {% empty %}
+      <div class="empty-state"><h3>No dealers found</h3><p>Choose another state from the filter.</p></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

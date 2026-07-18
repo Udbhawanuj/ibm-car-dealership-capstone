@@ -1,0 +1,71 @@
+name: Car Dealership CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    name: Test and Build Django Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: server/requirements.txt
+
+      - name: Install Dependencies
+        run: python -m pip install --upgrade pip && pip install -r server/requirements.txt
+
+      - name: Run Django System Check
+        working-directory: server
+        run: python manage.py check
+
+      - name: Run Django Migrations
+        working-directory: server
+        run: python manage.py migrate --noinput
+
+      - name: Seed Demo Data
+        working-directory: server
+        run: python manage.py seed_demo
+
+      - name: Run Unit Tests
+        working-directory: server
+        run: python manage.py test --verbosity 2
+
+      - name: Validate Required Frontend Files
+        run: |
+          test -f server/frontend/static/About.html
+          test -f server/frontend/static/Contact.html
+          test -f server/frontend/src/components/Register/Register.jsx
+          grep -q "About Us" server/frontend/static/About.html
+          grep -q "Contact Us" server/frontend/static/Contact.html
+          grep -q "Username" server/frontend/src/components/Register/Register.jsx
+          grep -q "First Name" server/frontend/src/components/Register/Register.jsx
+          grep -q "Last Name" server/frontend/src/components/Register/Register.jsx
+          grep -q "Email" server/frontend/src/components/Register/Register.jsx
+          grep -q "Password" server/frontend/src/components/Register/Register.jsx
+
+      - name: Collect Static Files
+        working-directory: server
+        env:
+          DJANGO_DEBUG: "False"
+        run: python manage.py collectstatic --noinput
+
+      - name: Compile Python Source
+        run: python -m compileall -q server
+
+      - name: Build Docker Image
+        run: docker build -t cars-dealership:${{ github.sha }} .
+
+      - name: Workflow Completed Successfully
+        run: echo "Workflow completed successfully"

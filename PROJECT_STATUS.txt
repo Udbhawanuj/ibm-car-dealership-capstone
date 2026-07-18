@@ -1,0 +1,14 @@
+PROJECT STATUS: VALIDATED
+
+- Django system check: PASS
+- Automated tests: 4/4 PASS
+- Demo data seeding: PASS
+- Login/logout API: PASS
+- GET logout with username: PASS
+- Dealer APIs: PASS
+- Car makes/models API: PASS
+- POST sentiment endpoint: PASS
+- GitHub Actions workflow included at repository root
+- Docker and Code Engine deployment files included
+
+Run your own GitHub Actions workflow and Code Engine deployment to create genuine cloud evidence.

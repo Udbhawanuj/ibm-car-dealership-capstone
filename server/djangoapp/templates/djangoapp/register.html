@@ -1,0 +1,17 @@
+{% extends 'djangoapp/base.html' %}
+{% block title %}Register | DriveSphere{% endblock %}
+{% block content %}
+<section class="form-page">
+  <div class="form-card">
+    <div class="form-intro"><span class="eyebrow dark">JOIN THE COMMUNITY</span><h1>Create your account</h1><p>Register to post verified dealership reviews.</p></div>
+    <form action="/ui/register/" method="post" class="review-form">{% csrf_token %}
+      <label>Username<input name="username" required></label>
+      <label>First Name<input name="first_name" required></label>
+      <label>Last Name<input name="last_name" required></label>
+      <label>Email<input name="email" type="email" required></label>
+      <label class="full">Password<input name="password" type="password" minlength="8" required></label>
+      <button class="btn btn-primary full" type="submit">Register</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+.venv/
+venv/
+.env
+node_modules/
+build/
+dist/
+.DS_Store
+cookies.txt
+server/db.sqlite3
+server/staticfiles/
+deployment-final.yml
+
+.venv/
